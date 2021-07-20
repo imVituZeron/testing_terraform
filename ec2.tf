@@ -22,9 +22,9 @@ resource "aws_security_group" "this" {
   ingress  {
     cidr_blocks = ["0.0.0.0/0"]
     description = "icmp/ping"
-    from_port = 8
+    from_port = -1
+    to_port = -1
     protocol = "icmp"
-    to_port = 8
   }
 
   egress {
