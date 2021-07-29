@@ -40,10 +40,13 @@ insert_files_in_instance_master(){
 }
 # ------------------------------------------------------------------ #
 # --------------------------- Main --------------------------------- #
+if [ -d "./text_files" ]; then
+   rm -rf ./text_files
+   mkdir text_files
+fi
+
 sudo chmod 777 $PATH_SCRIPT
 sudo chmod 777 $PATH_SCRIPT_ANSIBLE
-sudo chmod 777 ./text_files/public_dns_slave.txt
-sudo chmod 777 ./text_files/public_dns_master.txt
 sudo chmod 777 ./scripts/config_master.sh
 sudo chmod 777 ./scripts/config_slaves.sh
 
@@ -51,9 +54,11 @@ for VALUE in $(echo $PUBLIC_DNS); do
    echo "Instance = $VALUE"
    if [ $COUNT -eq 2 ]; then
       echo $VALUE >> ./text_files/public_dns_master.txt
+   sudo chmod 777 ./text_files/public_dns_master.txt
       insert_files_in_instance_master
    else
       echo $VALUE >> ./text_files/public_dns_slave.txt
+      sudo chmod 777 ./text_files/public_dns_slave.txt
       insert_files_in_instance
    fi
    COUNT=$[$COUNT + 1]
