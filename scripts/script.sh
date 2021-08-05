@@ -16,6 +16,7 @@
 #
 # ------------------------- Variables ----------------------------- #
 PUBLIC_DNS=$(cat terraform.tfstate | grep "public_dns" | cut -d'"' -f4)
+PRIVATE_ARRAY=($(cat terraform.tfstate | grep "private_ip" | grep -v "secondary_private_ips" | cut -d'"' -f4 ))
 INSTANCE_NAME="ubuntu"
 PATH_SCRIPT="./scripts/install_ansible.sh"
 PATH_SCRIPT_ANSIBLE="./scripts/playbook.yml"
@@ -25,17 +26,15 @@ COUNT=0
 insert_files_in_instance(){
    echo "---------- slave -----------------"
    scp $PATH_SCRIPT $INSTANCE_NAME@$VALUE:/home/$INSTANCE_NAME
-   scp ./text_files/public_dns_master.txt $INSTANCE_NAME@$VALUE:/home/$INSTANCE_NAME
-   scp ./scripts/config_slaves.sh $INSTANCE_NAME@$VALUE:/home/$INSTANCE_NAME
    echo "---------------------------"
 }
 
 insert_files_in_instance_master(){
    echo "------------ master ---------------"
-   scp $PATH_SCRIPT $INSTANCE_NAME@$VALUE:/home/$INSTANCE_NAME
    scp $PATH_SCRIPT_ANSIBLE $INSTANCE_NAME@$VALUE:/home/$INSTANCE_NAME
-   scp ./text_files/public_dns_slave.txt $INSTANCE_NAME@$VALUE:/home/$INSTANCE_NAME
-   scp ./scripts/config_master.sh $INSTANCE_NAME@$VALUE:/home/$INSTANCE_NAME
+   scp ./text_files/private_ip_slave_0.txt $INSTANCE_NAME@$VALUE:/home/$INSTANCE_NAME
+   scp ./text_files/private_ip_slave_1.txt $INSTANCE_NAME@$VALUE:/home/$INSTANCE_NAME
+   scp ./scripts/install_ansible_config_master.sh $INSTANCE_NAME@$VALUE:/home/$INSTANCE_NAME
    echo "---------------------------"
 }
 # ------------------------------------------------------------------ #
@@ -47,18 +46,24 @@ fi
 
 sudo chmod 777 $PATH_SCRIPT
 sudo chmod 777 $PATH_SCRIPT_ANSIBLE
-sudo chmod 777 ./scripts/config_master.sh
-sudo chmod 777 ./scripts/config_slaves.sh
+sudo chmod 777 ./scripts/install_ansible_config_master.sh
+
+# creating ip address files.
+for VALUE in ${PRIVATE_ARRAY[*]}; do
+   if [ $COUNT -ne 2 ]; then
+      echo $VALUE >> ./text_files/private_ip_slave_$COUNT.txt
+      sudo chmod 777 ./text_files/private_ip_slave_$COUNT.txt
+   fi
+   COUNT=$[$COUNT + 1]
+done
+
+COUNT=0
 
 for VALUE in $(echo $PUBLIC_DNS); do 
    echo "Instance = $VALUE"
    if [ $COUNT -eq 2 ]; then
-      echo $VALUE >> ./text_files/public_dns_master.txt
-   sudo chmod 777 ./text_files/public_dns_master.txt
       insert_files_in_instance_master
    else
-      echo $VALUE >> ./text_files/public_dns_slave.txt
-      sudo chmod 777 ./text_files/public_dns_slave.txt
       insert_files_in_instance
    fi
    COUNT=$[$COUNT + 1]

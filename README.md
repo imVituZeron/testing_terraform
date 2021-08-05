@@ -14,3 +14,13 @@ Dificuldades:
 Dificuldades:
 
 - Encontrei uma forma do terraform executar o script assim que ele estiver criando as instancias com o **remote-exec** mas não consegui configurar corretamente os paramentros. Então decidi executar o script manualmente nas instancias.
+
+### Observações
+
+- Antes de executar o arquivos **install_ansible_config_master.sh**, lembre-se de entrar como usuario
+root primeiro, pra depois executar:
+
+```
+ sudo su
+ ./install_ansible_config_master.sh
+```
