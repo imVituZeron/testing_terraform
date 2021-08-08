@@ -7,6 +7,7 @@
 # ChangeLog:
 #
 #     v1.0 23/07/2021
+#     v1.0 04/08/2021
 #
 # --------------------------------------------------------- #
 #  Seleciona as instancias atravez dos public_dns adquiridos no tfstate.
