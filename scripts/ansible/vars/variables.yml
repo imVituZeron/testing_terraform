@@ -1,0 +1,14 @@
+---
+default_r: /removed
+default_l: /installed
+default: /home/ubuntu/
+somes_mts: {
+  mt_1_r: "{{ default }}mt-1{{ default_r }}",
+  mt_1_l: "{{ default }}mt-1{{ default_l }}",
+  mt_2_r: "{{ default }}mt-2{{ default_r }}",
+  mt_2_l: "{{ default }}mt-2{{ default_l }}",
+  mt_3_r: "{{ default }}mt-3{{ default_r }}",
+  mt_3_l: "{{ default }}mt-3{{ default_l }}",
+  mt_4_r: "{{ default }}mt-4{{ default_r }}",
+  mt_4_l: "{{ default }}mt-4{{ default_l }}",
+}

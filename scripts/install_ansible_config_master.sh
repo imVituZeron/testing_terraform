@@ -15,9 +15,11 @@
 # ------------------------ Main --------------------------- #
 sudo apt update
 sudo apt-get install -y ansible
+sudo chmod 777 $HOME/ansible/inventory.yml
+sudo ssh-keygen
 
-echo "[testing_ansible]" >> /etc/ansible/hosts
+echo "[lab_ansible]" >> $HOME/ansible/inventory.yml
 for VALUE in 0 1; do
-    cat private_ip_slave_$VALUE.txt >> /etc/ansible/hosts
+    cat private_ip_slave_$VALUE.txt >> $HOME/ansible/inventory.yml
 done
 # --------------------------------------------------------- #

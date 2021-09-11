@@ -1,0 +1,22 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: yes
+
+  vars_files:
+    - vars/variables.yml
+
+  tasks:
+  - name: "CREATE DIRECTORIES TREE AT INSTANCES"
+    file:
+      path: "{{ item }}"
+      state: directory
+    with_items:
+      - "{{ somes_mts.mt_1_r }}"
+      - "{{ somes_mts.mt_1_l }}"
+      - "{{ somes_mts.mt_2_r }}"
+      - "{{ somes_mts.mt_2_l }}"
+      - "{{ somes_mts.mt_3_r }}"
+      - "{{ somes_mts.mt_3_l }}"
+      - "{{ somes_mts.mt_4_r }}"
+      - "{{ somes_mts.mt_4_l }}"
